@@ -1,0 +1,41 @@
+micronaut:
+  application:
+    name: restapi
+  server:
+    port: -1  # Random port for testing
+  # Micronaut Data JDBC configuration
+  data:
+    jdbc:
+      schema-generate: true
+      dialect: H2
+      repositories:
+        enabled: true
+
+# Use H2 in-memory database for testing
+datasources:
+  default:
+    db-type: h2
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password: ""
+    driver-class-name: org.h2.Driver
+    dialect: H2
+    schema-generate: CREATE_DROP
+    # Disable Oracle configuration
+    oracle:
+      enabled: false
+
+# Disable Oracle JDBC driver
+runtime:
+  exclude:
+    - "com.oracle.database.jdbc:ojdbc11"
+
+# Enable SQL logging
+jpa:
+  default:
+    entity-scan: 'com.example.model'
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: create-drop
+        show_sql: true
