@@ -7,10 +7,7 @@ import org.junit.jupiter.api.Assertions;
 
 import jakarta.inject.Inject;
 
-@MicronautTest(
-        environments = "test",
-        propertySources = "classpath:application-test.yaml",
-        transactional = false)
+@MicronautTest
 class RestapiTest {
 
     @Inject

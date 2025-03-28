@@ -6,6 +6,7 @@ target/
 out/
 .micronaut/
 .idea
+.vscode
 *.iml
 *.ipr
 *.iws
