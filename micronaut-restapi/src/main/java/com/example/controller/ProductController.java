@@ -11,6 +11,7 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.http.annotation.Status;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 import java.util.List;
@@ -46,13 +47,16 @@ public class ProductController {
     }
 
     @Put("/{id}")
+    @Transactional
     public HttpResponse<Product> updateProduct(Long id, @Body @Valid Product product) {
-        if (!productRepository.existsById(id)) {
-            return HttpResponse.notFound();
-        }
-        product.setId(id);
-        Product updatedProduct = productRepository.save(product);
-        return HttpResponse.ok(updatedProduct);
+        return productRepository.findById(id)
+                .map(existingProduct -> {
+                    existingProduct.setName(product.getName());
+                    existingProduct.setDescription(product.getDescription());
+                    existingProduct.setPrice(product.getPrice());
+                    return HttpResponse.ok(productRepository.save(existingProduct));
+                })
+                .orElse(HttpResponse.notFound());
     }
 
     @Delete("/{id}")
